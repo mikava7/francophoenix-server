@@ -7,7 +7,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import courseRouter from "./routes/courseRoutes.js";
 const app = express();
-const PORT = 5500 || process.env.PORT;
+const PORT = process.env.PORT || 5500;
 app.use(cors());
 app.use(cookieParser());
 
