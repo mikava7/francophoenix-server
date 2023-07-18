@@ -6,12 +6,19 @@ dotenv.config();
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import courseRouter from "./routes/courseRoutes.js";
+import audioRouter from "./routes/audioRoutes.js";
 const app = express();
-const PORT = process.env.PORT || 5500;
+const PORT = 5500 || process.env.PORT;
 app.use(cors());
 app.use(cookieParser());
-
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true, // If you need to include cookies in the requests
+  })
+);
 app.use(courseRouter);
+app.use(audioRouter);
 
 const start = async () => {
   try {

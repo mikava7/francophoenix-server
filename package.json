@@ -10,6 +10,8 @@
   "author": "irakli mikava",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.370.0",
+    "aws-sdk": "^2.1416.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
