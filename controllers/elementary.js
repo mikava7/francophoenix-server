@@ -55,12 +55,11 @@ export const getGrammer = async (req, res) => {
     }
 
     const grammer = course.grammer;
-    console.log("grammer", grammer);
 
     if (!grammer) {
       return res
         .status(404)
-        .json({ error: "Vocabulary not found for this lesson" });
+        .json({ error: "Grammer not found for this lesson" });
     }
 
     res.status(200).json(grammer);

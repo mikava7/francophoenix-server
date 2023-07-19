@@ -10,7 +10,7 @@ export const fetchAudioFiles = async (req, res) => {
   });
 
   const bucketName = "francophonixaudio";
-  const folderKey = "Audio-20230715T065055Z-001/dialogue";
+  const folderKey = "Audio-20230715T065055Z-001/";
 
   const command = new ListObjectsV2Command({
     Bucket: bucketName,
@@ -22,6 +22,7 @@ export const fetchAudioFiles = async (req, res) => {
     const audioFiles = response.Contents.map((file) => file.Key);
     res.status(200).json(audioFiles);
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: "Failed to fetch audio files" });
   }
 };
