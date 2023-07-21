@@ -7,7 +7,10 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import courseRouter from "./routes/courseRoutes.js";
 import audioRouter from "./routes/audioRoutes.js";
+<<<<<<< HEAD
 import bookrouter from "./routes/bookRoutes.js";
+=======
+>>>>>>> 35b9fa613e652d1af21b77088bace3366a2eef55
 const app = express();
 const PORT = 5500 || process.env.PORT;
 app.use(cors());
@@ -20,7 +23,10 @@ app.use(
 );
 app.use(courseRouter);
 app.use(audioRouter);
+<<<<<<< HEAD
 app.use(bookrouter);
+=======
+>>>>>>> 35b9fa613e652d1af21b77088bace3366a2eef55
 
 const start = async () => {
   try {
