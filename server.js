@@ -9,7 +9,7 @@ import courseRouter from "./routes/courseRoutes.js";
 import audioRouter from "./routes/audioRoutes.js";
 
 import bookrouter from "./routes/bookRoutes.js";
-
+import vocaBullaryTopicRoute from "./routes/vocabullaryTopicRoutes.js";
 const app = express();
 const PORT = 5500 || process.env.PORT;
 app.use(cors());
@@ -24,6 +24,7 @@ app.use(courseRouter);
 app.use(audioRouter);
 
 app.use(bookrouter);
+app.use(vocaBullaryTopicRoute);
 
 const start = async () => {
   try {
