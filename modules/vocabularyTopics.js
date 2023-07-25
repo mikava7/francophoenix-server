@@ -1,7 +1,10 @@
 import mongoose from "mongoose";
 
 const vocabularyTopicsSchema = new mongoose.Schema({
-  name: String,
+  nameEng: String,
+  nameFr: String,
+  nameGeo: String,
+  imageUrl: String,
   french: Array,
   english: Array,
   georgian: Array,
