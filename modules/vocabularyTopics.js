@@ -8,6 +8,14 @@ const vocabularyTopicsSchema = new mongoose.Schema({
   french: Array,
   english: Array,
   georgian: Array,
+
+  frenchExamples: Array,
+  englishExamples: Array,
+  georgianExamples: Array,
+
+  frenchTematic: Array,
+  englishTematic: Array,
+  georgianTematic: Array,
 });
 
 export default mongoose.model("vocabularyTopics", vocabularyTopicsSchema);
