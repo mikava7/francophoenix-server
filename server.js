@@ -7,9 +7,10 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import courseRouter from "./routes/courseRoutes.js";
 import audioRouter from "./routes/audioRoutes.js";
-
+import dictionaryRouter from "./routes/dictionaryRoutes.js";
 import bookrouter from "./routes/bookRoutes.js";
 import vocaBullaryTopicRoute from "./routes/vocabullaryTopicRoutes.js";
+import dialogueTopicRouter from "./routes/dialogueTopicRoutes.js";
 const app = express();
 const PORT = 5500 || process.env.PORT;
 app.use(cors());
@@ -22,9 +23,11 @@ app.use(
 );
 app.use(courseRouter);
 app.use(audioRouter);
+app.use(dictionaryRouter);
 
 app.use(bookrouter);
 app.use(vocaBullaryTopicRoute);
+app.use(dialogueTopicRouter);
 
 const start = async () => {
   try {

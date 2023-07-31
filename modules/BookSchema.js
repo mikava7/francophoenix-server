@@ -5,13 +5,13 @@ const bookSchema = new mongoose.Schema({
   author: { type: String },
   title: { type: String, required: true },
   level: { type: String },
-  poster: { type: String, required: true },
+  poster: { type: String },
   chapters: [
     {
-      chapterTitle: { type: String, required: true },
-      subTitle: { type: String },
-      text: { type: String, required: true },
-
+      chapterTitle: String,
+      subTitle: String,
+      text: String,
+      chapterImages: Array,
       // vocabulary: [DictionarySchema], // Using the DictionarySchema as a subdocument for vocabulary
     },
   ],
