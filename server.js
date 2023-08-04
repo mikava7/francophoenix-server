@@ -11,6 +11,7 @@ import dictionaryRouter from "./routes/dictionaryRoutes.js";
 import bookrouter from "./routes/bookRoutes.js";
 import vocaBullaryTopicRoute from "./routes/vocabullaryTopicRoutes.js";
 import dialogueTopicRouter from "./routes/dialogueTopicRoutes.js";
+import quizVocabularyRouter from "./routes/quizVocabularyRoutes.js";
 const app = express();
 const PORT = 5500 || process.env.PORT;
 app.use(cors());
@@ -28,6 +29,7 @@ app.use(dictionaryRouter);
 app.use(bookrouter);
 app.use(vocaBullaryTopicRoute);
 app.use(dialogueTopicRouter);
+app.use(quizVocabularyRouter);
 
 const start = async () => {
   try {

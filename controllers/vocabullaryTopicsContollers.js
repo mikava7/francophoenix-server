@@ -2,7 +2,6 @@ import vocabularyTopicsSchema from "../modules/vocabularyTopics.js";
 export const getVocabularyTopics = async (req, res) => {
   try {
     const vocabularyTopics = await vocabularyTopicsSchema.find();
-
     if (!vocabularyTopics) {
       return res.status(404).json({ error: "Vocabulary Topics not found" });
     }
