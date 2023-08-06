@@ -12,6 +12,8 @@ import bookrouter from "./routes/bookRoutes.js";
 import vocaBullaryTopicRoute from "./routes/vocabullaryTopicRoutes.js";
 import dialogueTopicRouter from "./routes/dialogueTopicRoutes.js";
 import quizVocabularyRouter from "./routes/quizVocabularyRoutes.js";
+import verbTenseRouter from "./routes/verbTenseRoutes/verbTenseRoutes.js";
+import sentenceBuilderRouter from "./routes/sentenceBuilder/sentenceBuilderRoutes.js";
 const app = express();
 const PORT = 5500 || process.env.PORT;
 app.use(cors());
@@ -30,6 +32,8 @@ app.use(bookrouter);
 app.use(vocaBullaryTopicRoute);
 app.use(dialogueTopicRouter);
 app.use(quizVocabularyRouter);
+app.use(verbTenseRouter);
+app.use(sentenceBuilderRouter);
 
 const start = async () => {
   try {
