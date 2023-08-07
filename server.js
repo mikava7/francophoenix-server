@@ -14,6 +14,8 @@ import dialogueTopicRouter from "./routes/dialogueTopicRoutes.js";
 import quizVocabularyRouter from "./routes/quizVocabularyRoutes.js";
 import verbTenseRouter from "./routes/verbTenseRoutes/verbTenseRoutes.js";
 import sentenceBuilderRouter from "./routes/sentenceBuilder/sentenceBuilderRoutes.js";
+import grammerRouter from "./routes/grammerRoutes/grammerRoutes.js";
+// import { updateWordsWithPartOfSpeechAndDefinition } from "./controllers/dictionaryContollers.js";
 const app = express();
 const PORT = 5500 || process.env.PORT;
 app.use(cors());
@@ -21,7 +23,8 @@ app.use(cookieParser());
 app.use(
   cors({
     origin: "http://localhost:5173",
-    credentials: true, // If you need to include cookies in the requests
+    credentials: true,
+    // If you need to include cookies in the requests
   })
 );
 app.use(courseRouter);
@@ -34,6 +37,16 @@ app.use(dialogueTopicRouter);
 app.use(quizVocabularyRouter);
 app.use(verbTenseRouter);
 app.use(sentenceBuilderRouter);
+app.use(grammerRouter);
+
+// app.get("/update-words", async (req, res) => {
+//   try {
+//     // Call the updateWordsWithPartOfSpeechAndDefinition controller
+//     await updateWordsWithPartOfSpeechAndDefinition(req, res);
+//   } catch (err) {
+//     res.status(500).json({ error: "Failed to update words" });
+//   }
+// });
 
 const start = async () => {
   try {
