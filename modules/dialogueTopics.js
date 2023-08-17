@@ -20,30 +20,34 @@ const dialogueTopicSchema = new mongoose.Schema({
           messageGeo: String,
         },
       ],
+      words: [
+        {
+          french: String,
+          english: String,
+          georgian: String,
+          definition: String,
+        },
+      ],
+      phrases: [
+        {
+          frenchPhr: String,
+          englishPhr: String,
+          georgianPhr: String,
+        },
+      ],
     },
   ],
-  vocabulary: {
-    fr: [String],
-    en: [String],
-    geo: [String],
-  },
-  verbs: [String],
-  phrases: {
-    fr: [String],
-    en: [String],
-    geo: [String],
-  },
-  exercise: {
-    exerciseName: String,
-    questions: [
-      {
-        question: String,
-        options: [String],
-        correctAnswer: String,
-      },
-    ],
-  },
-  actions: [{ action: "String", examples: [String] }],
+
+  // exercise: {
+  //   exerciseName: String,
+  //   questions: [
+  //     {
+  //       question: String,
+  //       options: [String],
+  //       correctAnswer: String,
+  //     },
+  //   ],
+  // },
 });
 
 export default mongoose.model("dialogueTopic", dialogueTopicSchema);
