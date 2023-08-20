@@ -16,6 +16,7 @@ import verbTenseRouter from "./routes/verbTenseRoutes/verbTenseRoutes.js";
 import sentenceBuilderRouter from "./routes/sentenceBuilder/sentenceBuilderRoutes.js";
 import grammerRouter from "./routes/grammerRoutes/grammerRoutes.js";
 // import { updateWordsWithPartOfSpeechAndDefinition } from "./controllers/dictionaryContollers.js";
+// import { updateQuizVocabularyShema } from "./controllers/quizVocabulary.js";
 const app = express();
 const PORT = 5500 || process.env.PORT;
 app.use(cors());
@@ -42,7 +43,7 @@ app.use(grammerRouter);
 // app.get("/update-words", async (req, res) => {
 //   try {
 //     // Call the updateWordsWithPartOfSpeechAndDefinition controller
-//     await updateWordsWithPartOfSpeechAndDefinition(req, res);
+//     await updateQuizVocabularyShema(req, res);
 //   } catch (err) {
 //     res.status(500).json({ error: "Failed to update words" });
 //   }

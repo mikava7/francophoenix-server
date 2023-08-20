@@ -1,31 +1,6 @@
 import express from "express";
 import Dictionary from "../modules/dictionarySchema.js";
 
-export const updateWordsWithPartOfSpeechAndDefinition = async (req, res) => {
-  try {
-    const words = await Dictionary.find();
-
-    // Create an array to store the bulk write operations
-    const bulkOperations = words.map((word) => ({
-      updateOne: {
-        filter: { _id: word._id },
-        update: {
-          $set: { synonym: "", antonym: "" },
-        },
-      },
-    }));
-
-    // Perform the bulk write operation
-    await Dictionary.bulkWrite(bulkOperations);
-
-    console.log("Successfully updated words with synonym and antonym.");
-    res.json({ message: "Words updated successfully." });
-  } catch (err) {
-    console.error("Error updating words:", err);
-    res.status(500).json({ error: "Failed to update words" });
-  }
-};
-
 export const getAllWords = async (req, res) => {
   try {
     const words = await Dictionary.find();
@@ -90,3 +65,27 @@ export async function getWordByEnglishOrGeorgian(req, res) {
     res.status(500).json({ error: "Failed to fetch word" });
   }
 }
+// export const updateWordsWithPartOfSpeechAndDefinition = async (req, res) => {
+//   try {
+//     const words = await Dictionary.find();
+
+//     // Create an array to store the bulk write operations
+//     const bulkOperations = words.map((word) => ({
+//       updateOne: {
+//         filter: { _id: word._id },
+//         update: {
+//           $set: { synonym: "", antonym: "" },
+//         },
+//       },
+//     }));
+
+//     // Perform the bulk write operation
+//     await Dictionary.bulkWrite(bulkOperations);
+
+//     console.log("Successfully updated words with synonym and antonym.");
+//     res.json({ message: "Words updated successfully." });
+//   } catch (err) {
+//     console.error("Error updating words:", err);
+//     res.status(500).json({ error: "Failed to update words" });
+//   }
+// };
