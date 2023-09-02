@@ -1,18 +1,21 @@
 import mongoose from "mongoose";
 const grammerSchema = new mongoose.Schema({
+  grammarAspect: String,
+  verbKey: [String],
+
   title: {
     titleFr: { type: String, required: true },
-    titleEn: { type: String, required: true },
+    titleEng: { type: String, required: true },
     titleGeo: { type: String },
   },
   description: {
     descriptionFr: [String],
-    descriptionEn: [String],
+    descriptionEng: [String],
     descriptionGeo: [String],
   },
   example: {
     exampleFr: [String],
-    exampleEn: [String],
+    exampleEng: [String],
     exampleGeo: [String],
   },
 });

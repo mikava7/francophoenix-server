@@ -8,13 +8,16 @@ import cookieParser from "cookie-parser";
 import courseRouter from "./routes/courseRoutes.js";
 import audioRouter from "./routes/audioRoutes.js";
 import dictionaryRouter from "./routes/dictionaryRoutes.js";
-import bookrouter from "./routes/bookRoutes.js";
+import bookrouter from "./routes/bookRoutes/bookRoutes.js";
 import vocaBullaryTopicRoute from "./routes/vocabullaryTopicRoutes.js";
 import dialogueTopicRouter from "./routes/dialogueTopicRoutes.js";
 import quizVocabularyRouter from "./routes/quizVocabularyRoutes.js";
 import verbTenseRouter from "./routes/verbTenseRoutes/verbTenseRoutes.js";
 import sentenceBuilderRouter from "./routes/sentenceBuilder/sentenceBuilderRoutes.js";
 import grammerRouter from "./routes/grammerRoutes/grammerRoutes.js";
+import conjugationRouter from "./routes/conjugationRoutes/conjugationRoutes.js";
+import { upadeteAllBooks } from "./controllers/bookController/bookController.js";
+import { modifyFieldName } from "./controllers/dictionaryContollers.js";
 // import { updateWordsWithPartOfSpeechAndDefinition } from "./controllers/dictionaryContollers.js";
 // import { updateQuizVocabularyShema } from "./controllers/quizVocabulary.js";
 const app = express();
@@ -39,16 +42,9 @@ app.use(quizVocabularyRouter);
 app.use(verbTenseRouter);
 app.use(sentenceBuilderRouter);
 app.use(grammerRouter);
+app.use(conjugationRouter);
 
-// app.get("/update-words", async (req, res) => {
-//   try {
-//     // Call the updateWordsWithPartOfSpeechAndDefinition controller
-//     await updateQuizVocabularyShema(req, res);
-//   } catch (err) {
-//     res.status(500).json({ error: "Failed to update words" });
-//   }
-// });
-
+//
 const start = async () => {
   try {
     await connectToDB(process.env.MONGODB_URI);
@@ -67,3 +63,29 @@ const start = async () => {
 };
 
 start();
+
+///////////////////////////////////
+// app.get("/update-books", async (req, res) => {
+//   try {
+//     await upadeteAllBooks(req, res);
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json({ error: "Failed to update books" });
+//   }
+// });
+// ;app.get("/update-words", async (req, res) => {
+//   try {
+//     // Call the updateWordsWithPartOfSpeechAndDefinition controller
+//     await updateQuizVocabularyShema(req, res);
+//   } catch (error) {
+//     res.status(500).json({ error: "Failed to update words" });
+//   }
+// });
+app.get("/update-field-name", async (req, res) => {
+  try {
+    // Call the updateWordsWithPartOfSpeechAndDefinition controller
+    await modifyFieldName(req, res); // Pass the req and res objects
+  } catch (error) {
+    res.status(500).json({ error: "Failed to update name" });
+  }
+});

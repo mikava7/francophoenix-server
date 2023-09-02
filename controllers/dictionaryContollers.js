@@ -19,21 +19,22 @@ export const getAllWords = async (req, res) => {
 };
 
 // Controller to fetch words by their French translation (partial match) and sort them as required
-export const getWordsByFrench = async (req, res) => {
-  const { french } = req.params;
+export const getWordsByLanguage = async (req, res) => {
+  const { language, query } = req.params;
+  console.log(language, query);
   try {
-    const regex = new RegExp(french, "i"); // Case-insensitive partial match regex
+    const regex = new RegExp(query, "i"); // Case-insensitive partial match regex
     const words = await Dictionary.find({
-      french: { $regex: regex },
+      [language]: { $regex: regex },
     });
 
     // Sort the results based on exact match first and then by length (longest to shortest)
     words.sort((a, b) => {
-      const aIsExactMatch = a.french.toLowerCase() === french.toLowerCase();
-      const bIsExactMatch = b.french.toLowerCase() === french.toLowerCase();
+      const aIsExactMatch = a[language].toLowerCase() === query.toLowerCase();
+      const bIsExactMatch = b[language].toLowerCase() === query.toLowerCase();
       if (aIsExactMatch && !bIsExactMatch) return -1;
       if (!aIsExactMatch && bIsExactMatch) return 1;
-      return a.french.length - b.french.length;
+      return a[language].length - b[language].length;
     });
 
     if (words.length === 0) {
@@ -88,4 +89,18 @@ export async function getWordByEnglishOrGeorgian(req, res) {
 //     console.error("Error updating words:", err);
 //     res.status(500).json({ error: "Failed to update words" });
 //   }
-// };
+export const modifyFieldName = async (req, res) => {
+  try {
+    // Count the number of documents with "description" field before the update
+
+    await Dictionary.updateMany({}, { $rename: { description: "definition" } });
+
+    const countBeforeUpdate = await Dictionary.countDocuments({
+      definition: { $exists: true },
+    });
+    res.status(200).json(countBeforeUpdate);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to update field name" });
+  }
+};

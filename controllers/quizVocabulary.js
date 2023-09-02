@@ -25,6 +25,8 @@ export const getQuizTopicNames = async (req, res) => {
           topic: 1,
           wordsCount: { $size: "$words" }, // Calculate the size of the words array
           imageUrl: 1,
+          textVerbs: 1, // Include the textVerbs field
+          verbFormMapping: 1, // Include the verbFormMapping field
         },
       },
     ]);
@@ -50,9 +52,11 @@ export const updateQuizVocabularyShema = async (req, res) => {
         filter: { _id: topic._id },
         update: {
           $set: {
-            imageUrl: "",
-            text: "",
-            exercises: [],
+            // imageUrl: "",
+            // text: "",
+            // exercises: [],
+            textVerbs: [],
+            verbFormMapping: {},
           },
         },
       },
