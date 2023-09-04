@@ -29,7 +29,9 @@ app.use(cors());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    // origin: "http://localhost:5173",
+    origin:
+      "https://64f62eb9f0dbdb0fa7d1fa8a--melodious-pavlova-cbd635.netlify.app/",
     credentials: true,
     // If you need to include cookies in the requests
   })
@@ -49,18 +51,6 @@ app.use(conjugationRouter);
 app.get("/health", (req, res) => {
   res.status(200).send("OK");
 });
-//
-
-// HTTPS Configuration with Self-Signed Certificates
-// const privateKey = fs.readFileSync("path/to/private-key.pem", "utf8");
-// const certificate = fs.readFileSync("path/to/certificate.pem", "utf8");
-
-// const credentials = { key: privateKey, cert: certificate };
-// const httpsServer = https.createServer(credentials, app);
-
-// httpsServer.listen(HTTPS_PORT, () => {
-//   console.log(`HTTPS server is listening on port ${HTTPS_PORT}`);
-// });
 
 const start = async () => {
   try {
