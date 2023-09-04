@@ -6,7 +6,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "build": "npm install && npm run build",
+    "build": "npm run build",
     "dev": "nodemon server.js"
   },
   "author": "irakli mikava",
