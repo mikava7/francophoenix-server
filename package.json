@@ -5,10 +5,9 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "build": "vite build",
     "start": "node server.js",
-    "dev": "vite",
-    "deploy": "npm install && npm run build"
+    "build": "npm install && npm run build",
+    "dev": "nodemon server.js"
   },
   "author": "irakli mikava",
   "license": "ISC",
