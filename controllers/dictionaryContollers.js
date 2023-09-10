@@ -18,6 +18,24 @@ export const getAllWords = async (req, res) => {
   }
 };
 
+// export const getAllVerbs = async (req, res) => {
+//   try {
+//     // Use the correct query to find words with part_of_speech "v" or "v."
+//     const verbs = await Dictionary.find({
+//       part_of_speech: { $in: ["v", "v."] },
+//     });
+
+//     if (!verbs || verbs.length === 0) {
+//       res.status(400).json({ message: "No verbs found" });
+//     }
+
+//     res.status(200).json(verbs);
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json({ error: "Failed to fetch verbs" });
+//   }
+// };
+
 // Controller to fetch words by their French translation (partial match) and sort them as required
 export const getWordsByLanguage = async (req, res) => {
   const { language, query } = req.params;

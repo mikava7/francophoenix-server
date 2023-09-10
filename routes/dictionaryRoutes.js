@@ -7,6 +7,7 @@ import {
 const dictionaryRouter = express.Router();
 
 dictionaryRouter.get("/words", getAllWords);
+
 dictionaryRouter.get("/words/:language/:query", getWordsByLanguage);
 dictionaryRouter.get(
   "/words/translation/:translation",

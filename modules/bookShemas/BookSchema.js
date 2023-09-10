@@ -5,6 +5,7 @@ const vocabularySchema = new mongoose.Schema({
   english: String,
   georgian: String,
   definition: String,
+  part_of_speech: String,
 });
 const bookSchema = new mongoose.Schema({
   author: String,
@@ -13,13 +14,18 @@ const bookSchema = new mongoose.Schema({
   poster: String,
   description: String,
 
-  vocabulary: [vocabularySchema],
   chapters: [
     {
       chapterTitle: String,
       subTitle: String,
       text: String,
       chapterImages: Array,
+      textVerbs: Array,
+      chapterVocabulary: [vocabularySchema],
+      verbFormMapping: {
+        type: Map,
+        of: String,
+      },
     },
   ],
 });
