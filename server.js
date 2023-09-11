@@ -18,6 +18,7 @@ import verbTenseRouter from "./routes/verbTenseRoutes/verbTenseRoutes.js";
 import sentenceBuilderRouter from "./routes/sentenceBuilder/sentenceBuilderRoutes.js";
 import grammerRouter from "./routes/grammerRoutes/grammerRoutes.js";
 import conjugationRouter from "./routes/conjugationRoutes/conjugationRoutes.js";
+import authRouter from "./routes/auth/authRouter.js";
 import { upadeteAllBooks } from "./controllers/bookController/bookController.js";
 import { modifyFieldName } from "./controllers/dictionaryContollers.js";
 // import { updateWordsWithPartOfSpeechAndDefinition } from "./controllers/dictionaryContollers.js";
@@ -35,6 +36,8 @@ app.use(
     // If you need to include cookies in the requests
   })
 );
+app.use(express.json());
+
 app.use(courseRouter);
 app.use(audioRouter);
 app.use(dictionaryRouter);
@@ -47,6 +50,8 @@ app.use(verbTenseRouter);
 app.use(sentenceBuilderRouter);
 app.use(grammerRouter);
 app.use(conjugationRouter);
+app.use(authRouter);
+
 app.get("/health", (req, res) => {
   res.status(200).send("OK");
 });
