@@ -55,7 +55,7 @@ export const loginUser = async (req, res) => {
       sameSite: "None", // Cross-site cookie
       maxAge: 7 * 24 * 60 * 60 * 1000, // Cookie expiry: set to match refresh token
     });
-    console.log("cookie", res.cookie);
+    // console.log("cookie", res.cookie);
     // Send the accessToken containing username and roles
     res.json({ accessToken, user: currentUser });
   } catch (error) {
@@ -89,9 +89,10 @@ export const loginUser = async (req, res) => {
 
 export const logoutUser = async (req, res) => {
   try {
-    const { id } = req.body; // Assuming you have access to the user's ID in req.user
-    console.log("req.body", req.body);
-    console.log("userId", id);
+    const { id } = req.body;
+
+    console.log("id in logoutUser", id);
+    console.log("req.body in logoutUser", req.body);
 
     // Update the user's role to "consumer" in the database
     await User.findByIdAndUpdate(id, { role: "consumer" });

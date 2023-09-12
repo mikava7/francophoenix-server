@@ -4,10 +4,6 @@ import { validationResult } from "express-validator";
 
 export const registerUser = async (req, res) => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
     // Extract user registration data from the request body
     const { username, email, password } = req.body;
     let generatedUsername = username; // Initialize with the provided username
@@ -30,7 +26,7 @@ export const registerUser = async (req, res) => {
       return res.status(400).json({ message: "Username already exists" });
     }
     if (existingEmail) {
-      return res.status(400).json({ message: "Email already exists" });
+      return res.status(401).json({ message: "Email already exists" });
     }
 
     // Hash the user's password before saving it
