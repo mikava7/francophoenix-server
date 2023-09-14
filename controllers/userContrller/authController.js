@@ -64,35 +64,9 @@ export const loginUser = async (req, res) => {
   }
 };
 
-// export const authenticateUser = (req, res, next) => {
-//   const cookies = req.cookies;
-//   //   console.log("cookies", cookies);
-//   const jwtToken = cookies?.jwt;
-//   //   console.log("jwtToken", jwtToken);
-
-//   if (!jwtToken) {
-//     return res.status(402).json({ message: "Unauthorized." });
-//   }
-
-//   try {
-//     const decoded = jwt.verify(jwtToken, process.env.ACCESS_TOKEN_SECRET);
-//     console.log("decoded", decoded);
-//     req.user = decoded.UserInfo; // Attach user info to the request
-//     console.log("req.user", req.user);
-
-//     next(); // Continue to the next middleware or route
-//   } catch (error) {
-//     console.log(error);
-//     return res.status(403).json({ message: "Unauthorized" });
-//   }
-// };
-
 export const logoutUser = async (req, res) => {
   try {
     const { id } = req.body;
-
-    console.log("id in logoutUser", id);
-    console.log("req.body in logoutUser", req.body);
 
     // Update the user's role to "consumer" in the database
     await User.findByIdAndUpdate(id, { role: "consumer" });
