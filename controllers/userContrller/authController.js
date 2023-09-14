@@ -60,7 +60,9 @@ export const loginUser = async (req, res) => {
     res.json({ accessToken, user: currentUser });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Internal server error" });
+    res
+      .status(500)
+      .json({ error: error.message, message: "Internal server error!" });
   }
 };
 
