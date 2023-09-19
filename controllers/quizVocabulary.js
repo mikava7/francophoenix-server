@@ -4,7 +4,7 @@ export const getQuizData = async (req, res) => {
   const { index } = req.params;
   try {
     const quizData = await quizVocabulary.findOne({ _id: index });
-
+    console.log(quizData);
     if (!quizData) {
       return res.status(404).json({ error: "Vocabulary data not found" });
     }
@@ -23,10 +23,10 @@ export const getQuizTopicNames = async (req, res) => {
         $project: {
           _id: 1,
           topic: 1,
+          topicEng: 1,
+          topicGeo: 1,
           wordsCount: { $size: "$words" }, // Calculate the size of the words array
           imageUrl: 1,
-          textVerbs: 1, // Include the textVerbs field
-          verbFormMapping: 1, // Include the verbFormMapping field
         },
       },
     ]);

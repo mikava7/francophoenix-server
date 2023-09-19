@@ -13,7 +13,7 @@ const bookSchema = new mongoose.Schema({
   level: String,
   poster: String,
   description: String,
-
+  verbs: [vocabularySchema],
   chapters: [
     {
       chapterTitle: String,

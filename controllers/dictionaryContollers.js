@@ -39,7 +39,7 @@ export const getAllWords = async (req, res) => {
 // Controller to fetch words by their French translation (partial match) and sort them as required
 export const getWordsByLanguage = async (req, res) => {
   const { language, query } = req.params;
-  console.log(language, query);
+  // console.log(language, query);
   try {
     const regex = new RegExp(query, "i"); // Case-insensitive partial match regex
     const words = await Dictionary.find({
@@ -122,3 +122,18 @@ export const modifyFieldName = async (req, res) => {
     res.status(500).json({ error: "Failed to update field name" });
   }
 };
+
+// // Backend route
+// export const getListOfVerbs = async (req, res) => {
+//   const { data: verbs } = req.body;
+//   console.log(verbs);
+//   console.log("reqbody", req);
+
+//   try {
+//     const listOfVerbs = await Dictionary.find({ french: { $in: verbs } });
+//     res.json(listOfVerbs);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: "Failed to fetch verbs" });
+//   }
+// };

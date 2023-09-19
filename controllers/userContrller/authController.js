@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
-  console.log({ email, password });
+  // console.log({ email, password });
   try {
     if (!email || !password) {
       return res.status(400).json({ message: "All fields are required." });
@@ -59,10 +59,11 @@ export const loginUser = async (req, res) => {
     // Send the accessToken containing username and roles
     res.json({ accessToken, user: currentUser });
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     res
       .status(500)
-      .json({ error: error.message, message: "Internal server error!" });
+      // .json({ error: error.message, message: "Internal server error!" });
+      .json({ message: "Internal server error!" });
   }
 };
 
