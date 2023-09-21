@@ -52,24 +52,25 @@ export const registerUser = async (req, res) => {
 
 export const updateUser = async (req, res) => {
   try {
-    const { id, username } = req.body;
+    const { id, newUsername } = req.body; // Use "newUsername" instead of "username"
     const user = await User.findById(id).exec();
     if (!user) {
       return res.status(400).json({ message: "User not found" });
     }
 
     const existingUsername = await User.findOne({
-      $or: [{ username }],
+      $or: [{ username: newUsername }], // Use "newUsername" here
     });
 
     if (existingUsername) {
       return res.status(400).json({ message: "Username already exists" });
     }
-    user.username = username;
-    console.log("username", username);
+
+    user.username = newUsername; // Use "newUsername" here
     const updatedUser = await user.save();
     res.json({
-      message: `Username changed succesfully`,
+      updatedUser,
+      message: `Username changed successfully`,
     });
   } catch (error) {
     console.error(error);

@@ -13,6 +13,28 @@ export const getBasicGrammerLessons = async (req, res) => {
   }
 };
 
+export const getAllAspects = async (req, res) => {
+  try {
+    const allAspectsData = await Grammer.aggregate([
+      {
+        $group: {
+          _id: "$grammarAspect",
+          titles: { $push: "$title" },
+          subtopics: { $push: "$_id" },
+        },
+      },
+    ]);
+
+    if (allAspectsData.length === 0) {
+      return res.status(404).json({ message: "Grammar data not found" });
+    }
+
+    res.status(200).json(allAspectsData);
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 export const getGrammarTopicsByAspect = async (req, res) => {
   const aspect = req.params.aspect; // Get the aspect from the request params
 
@@ -62,6 +84,21 @@ export const getGrammarAspectList = async (req, res) => {
     );
 
     res.status(200).json(uniqueAspects);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const getAllSubtitles = async (req, res) => {
+  try {
+    const subtitles = await Grammer.find({}, { _id: 1, "title.titleFr": 1 });
+
+    if (!subtitles || subtitles.length === 0) {
+      return res.status(404).json({ message: "No subtitles were found" });
+    }
+
+    res.status(200).json(subtitles);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });

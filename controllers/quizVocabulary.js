@@ -4,7 +4,7 @@ export const getQuizData = async (req, res) => {
   const { index } = req.params;
   try {
     const quizData = await quizVocabulary.findOne({ _id: index });
-    console.log(quizData);
+    // console.log(quizData);
     if (!quizData) {
       return res.status(404).json({ error: "Vocabulary data not found" });
     }
