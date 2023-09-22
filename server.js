@@ -37,6 +37,16 @@ app.use(
     // If you need to include cookies in the requests
   })
 );
+
+app.use((req, res, next) => {
+  res.header(
+    "Access-Control-Allow-Origin",
+    "https://francophoenix.netlify.app"
+  );
+  // Add other necessary CORS headers here if needed
+  next();
+});
+
 app.use(express.json());
 
 app.use(courseRouter);
