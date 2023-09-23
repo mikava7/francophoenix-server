@@ -30,10 +30,10 @@ app.use(cors());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    // origin: "http://localhost:5173",
 
     // origin: "https://frang.ge",
-    // origin: "https://francophoenix.netlify.app",
+    origin: "https://francophoenix.netlify.app",
     credentials: true,
     // If you need to include cookies in the requests
   })
