@@ -1,0 +1,4 @@
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/frangge/public_html/
+    - /bin/cp server.js $DEPLOYPATH
