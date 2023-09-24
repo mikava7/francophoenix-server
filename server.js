@@ -32,21 +32,11 @@ app.use(
   cors({
     // origin: "http://localhost:5173",
 
-    // origin: "https://frang.ge",
-    origin: "https://francophoenix.netlify.app",
+    origin: "https://frang.ge",
+    // origin: "https://francophoenix.netlify.app",
     credentials: true,
-    // If you need to include cookies in the requests
   })
 );
-
-// app.use((req, res, next) => {
-//   res.header(
-//     "Access-Control-Allow-Origin",
-//     "https://francophoenix.netlify.app"
-//   );
-//   // Add other necessary CORS headers here if needed
-//   next();
-// });
 
 app.use(express.json());
 
@@ -73,7 +63,7 @@ const start = async () => {
     await connectToDB(process.env.MONGODB_URI);
 
     app.get("/", (req, res) => {
-      res.send("Hello");
+      res.send("Hello app is running...");
     });
 
     app.listen(PORT, () => {
