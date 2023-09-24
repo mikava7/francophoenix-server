@@ -32,8 +32,8 @@ app.use(
   cors({
     // origin: "http://localhost:5173",
 
-    origin: "https://frang.ge",
-    // origin: "https://francophoenix.netlify.app",
+    // origin: "https://frang.ge",
+    origin: "https://francophoenix.netlify.app",
     credentials: true,
   })
 );
