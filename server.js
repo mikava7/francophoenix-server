@@ -8,7 +8,6 @@ dotenv.config();
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import courseRouter from "./routes/courseRoutes.js";
-import audioRouter from "./routes/audioRoutes.js";
 import dictionaryRouter from "./routes/dictionaryRoutes.js";
 import bookrouter from "./routes/bookRoutes/bookRoutes.js";
 import vocaBullaryTopicRoute from "./routes/vocabullaryTopicRoutes.js";
@@ -21,6 +20,7 @@ import conjugationRouter from "./routes/conjugationRoutes/conjugationRoutes.js";
 import authRouter from "./routes/auth/authRouter.js";
 import { upadeteAllBooks } from "./controllers/bookController/bookController.js";
 import { modifyFieldName } from "./controllers/dictionaryContollers.js";
+import Grammer from "./modules/grammerSchemas/grammerShema.js";
 // import { updateWordsWithPartOfSpeechAndDefinition } from "./controllers/dictionaryContollers.js";
 // import { updateQuizVocabularyShema } from "./controllers/quizVocabulary.js";
 const app = express();
@@ -41,7 +41,6 @@ app.use(
 app.use(express.json());
 
 app.use(courseRouter);
-app.use(audioRouter);
 app.use(dictionaryRouter);
 
 app.use(bookrouter);
