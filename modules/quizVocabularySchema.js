@@ -6,7 +6,19 @@ const verbSchema = new mongoose.Schema({
   part_of_speech: String,
   definition: String,
 });
+const categorySchema = new mongoose.Schema({
+  categoryFr: String,
+  categoryEn: String,
+  categoryKa: String,
+});
+const typeShema = new mongoose.Schema({
+  typeFr: String,
+  typeEn: String,
+  typeKa: String,
+});
 const quizVocabularySchema = new mongoose.Schema({
+  type: [typeShema],
+  category: [categorySchema],
   topic: String,
   topicEng: String,
   topicGeo: String,
@@ -14,7 +26,7 @@ const quizVocabularySchema = new mongoose.Schema({
   imageUrl: String,
   text: String,
   exercises: Array,
-  textVerbs: [String], // List of verbs in the text
+  textVerbs: [String],
   verbFormMapping: {
     type: Map,
     of: String,

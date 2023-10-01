@@ -20,6 +20,10 @@ export const getQuizTopicNames = async (req, res) => {
   try {
     const topicNamesWithInfo = await quizVocabulary.aggregate([
       {
+        $unwind: "$category",
+      },
+
+      {
         $project: {
           _id: 1,
           topic: 1,
@@ -27,6 +31,13 @@ export const getQuizTopicNames = async (req, res) => {
           topicGeo: 1,
           wordsCount: { $size: "$words" }, // Calculate the size of the words array
           imageUrl: 1,
+          "category.categoryFr": 1,
+          "category.categoryEn": 1,
+          "category.categoryKa": 1,
+          type: 1,
+          "type.typeFr": 1,
+          "type.typeEn": 1,
+          "type.typeKa": 1,
         },
       },
     ]);
