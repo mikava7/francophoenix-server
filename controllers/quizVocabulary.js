@@ -34,7 +34,7 @@ export const getQuizTopicNames = async (req, res) => {
           "category.categoryFr": 1,
           "category.categoryEn": 1,
           "category.categoryKa": 1,
-          type: 1,
+
           "type.typeFr": 1,
           "type.typeEn": 1,
           "type.typeKa": 1,
