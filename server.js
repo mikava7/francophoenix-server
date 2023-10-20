@@ -21,6 +21,7 @@ import authRouter from "./routes/auth/authRouter.js";
 import { upadeteAllBooks } from "./controllers/bookController/bookController.js";
 import { modifyFieldName } from "./controllers/dictionaryContollers.js";
 import Grammer from "./modules/grammerSchemas/grammerShema.js";
+import portfolioRouter from "./routes/portfolio/portfolioRouter.js";
 // import { updateWordsWithPartOfSpeechAndDefinition } from "./controllers/dictionaryContollers.js";
 // import { updateQuizVocabularyShema } from "./controllers/quizVocabulary.js";
 const app = express();
@@ -30,8 +31,8 @@ app.use(cors());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "https://francophoenix.netlify.app",
-    // origin: "http://localhost:5173",
+    // origin: "https://francophoenix.netlify.app",
+    origin: "http://localhost:5173",
 
     // origin: "https://frang.ge",
     credentials: true,
@@ -52,6 +53,7 @@ app.use(sentenceBuilderRouter);
 app.use(grammerRouter);
 app.use(conjugationRouter);
 app.use(authRouter);
+app.use(portfolioRouter);
 
 app.get("/health", (req, res) => {
   res.status(200).send("OK");

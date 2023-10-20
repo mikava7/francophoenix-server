@@ -83,3 +83,33 @@ export const updateQuizVocabularyShema = async (req, res) => {
     res.status(500).json({ error: "Failed to update words" });
   }
 };
+
+export const deleteWord = async (req, res) => {
+  const topicId = req.params.id;
+  const wordIndex = req.params.index;
+  console.log("topicId", topicId);
+  console.log("wordIndex", wordIndex);
+
+  try {
+    const vocabulary = await quizVocabulary.findById(topicId);
+
+    if (!vocabulary) {
+      return res.status(404).json({ error: "topic not found" });
+    }
+
+    if (wordIndex < 0 || wordIndex >= vocabulary.words.length) {
+      return res.status(400).json({ error: "Invalid word index" });
+    }
+
+    // Use $pull to remove the item at the specified index
+    await vocabulary.updateOne(
+      { _id: topicId },
+      { $pull: { words: { _id: vocabulary.words[wordIndex]._id } } }
+    );
+
+    res.status(200).json({ message: "Word deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting word:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};

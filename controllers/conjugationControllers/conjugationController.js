@@ -1,9 +1,9 @@
 import Conjugation from "../../modules/verbs/conjugation.js";
-
+import VerbTenseExercise from "../../modules/verbTenseShemas/presentTenseSchema.js";
 export const getAllVerbs = async (req, res) => {
   try {
     // Find all documents and retrieve only the 'verb' field
-    const allVerbs = await Conjugation.find({}, "verb");
+    const allVerbs = await Conjugation.find({}, "verb primary verbGroup");
 
     if (!allVerbs) {
       return res.status(404).json({ message: "Verbs not found" });
@@ -18,14 +18,37 @@ export const getVerbDetails = async (req, res) => {
   try {
     const { verb } = req.params; // Get the verb from the request parameters
 
-    // Find the verb details in the database based on the verb
-    const verbDetails = await Conjugation.findOne({ verb });
+    // Find the verb details in the database based on the verb and populate the exercise field
+    const verbDetails = await Conjugation.findOne({ verb }).populate(
+      "exercise"
+    );
+    let verbExercise = await VerbTenseExercise.findOne({ verb });
+
+    if (!verbExercise) {
+      verbExercise = "Exercise will be added soon";
+    }
 
     if (!verbDetails) {
       return res.status(404).json({ message: "Verb details not found" });
     }
 
-    res.status(200).json(verbDetails);
+    let verbWithExercise;
+
+    if (typeof verbExercise === "object") {
+      // Combine the two objects into one
+      verbWithExercise = {
+        ...verbDetails.toObject(),
+        exercise: verbExercise.toObject(),
+      };
+    } else {
+      verbWithExercise = {
+        ...verbDetails.toObject(),
+        exercise: verbExercise,
+      };
+    }
+
+    // Send the combined object as the response
+    return res.status(200).json(verbWithExercise);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
