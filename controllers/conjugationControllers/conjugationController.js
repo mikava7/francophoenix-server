@@ -19,9 +19,7 @@ export const getVerbDetails = async (req, res) => {
     const { verb } = req.params; // Get the verb from the request parameters
 
     // Find the verb details in the database based on the verb and populate the exercise field
-    const verbDetails = await Conjugation.findOne({ verb }).populate(
-      "exercise"
-    );
+    const verbDetails = await Conjugation.findOne({ verb });
     let verbExercise = await VerbTenseExercise.findOne({ verb });
 
     if (!verbExercise) {

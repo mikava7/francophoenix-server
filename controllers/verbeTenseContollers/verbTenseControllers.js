@@ -18,10 +18,8 @@ export const getPresentTenseVerbs = async (req, res) => {
 
 export const getVerbExercise = async (req, res) => {
   const { id } = req.params;
-  console.log("id", id);
   try {
-    const verbTenses = await VerbTenseExercise.findById(id); // Assuming you want to find exercises for a specific verb
-
+    const verbTenses = await VerbTenseExercise.findById(id);
     if (!verbTenses) {
       // Handle the case where no exercises were found
       return res
@@ -35,5 +33,19 @@ export const getVerbExercise = async (req, res) => {
     // Handle any potential errors
     console.error("Error:", error);
     res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const getVerbList = async (req, res) => {
+  try {
+    // Find all documents and retrieve only the 'verb' field
+    const allVerbs = await VerbTenseExercise.find({}, "verb  _id");
+
+    if (!allVerbs) {
+      return res.status(404).json({ message: "Verbs not found" });
+    }
+    res.status(200).json(allVerbs);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch verbs" });
   }
 };
