@@ -18,6 +18,8 @@ export const getPresentTenseVerbs = async (req, res) => {
 
 export const getVerbExercise = async (req, res) => {
   const { id } = req.params;
+  // console.log("id", id);
+
   try {
     const verbTenses = await VerbTenseExercise.findById(id);
     if (!verbTenses) {
