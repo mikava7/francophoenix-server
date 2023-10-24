@@ -68,3 +68,26 @@ export const submitExercise = async (req, res) => {
       .json({ success: false, message: "Error submitting exercise" });
   }
 };
+
+export const getUserProgress = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    console.log("userId", userId);
+    // Use Mongoose to query the UserProgress model
+    const userProgress = await UserProgress.findOne({ userId });
+
+    if (!userProgress) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User progress not found" });
+    }
+
+    // Return the user progress data
+    return res.status(200).json({ success: true, userProgress });
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Error fetching user progress" });
+  }
+};
