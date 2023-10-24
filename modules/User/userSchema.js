@@ -19,6 +19,10 @@ const userSchema = new mongoose.Schema({
     enum: ["consumer", "subscriber", "admin"],
     default: "consumer",
   },
+  progressId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "UserProgress",
+  },
 });
 const User = mongoose.model("User", userSchema);
 export default User;

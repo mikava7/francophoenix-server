@@ -9,7 +9,6 @@ import {
 import { loginValidator, registerValidator } from "../../utils/vaidations.js";
 import validationErrors from "../../utils/validationErrors.js";
 import express from "express";
-
 const authRouter = express.Router();
 
 authRouter.post("/register", registerValidator, validationErrors, registerUser);
