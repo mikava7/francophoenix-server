@@ -9,19 +9,21 @@ const userProgressSchema = new mongoose.Schema({
   verbs: [
     {
       verb: String,
-
       tenses: [
         {
           tenseName: String,
-          percentage: Number,
-          exerciseType: String,
+          percentages: [
+            {
+              exerciseType: String,
+              percentage: Number,
+            },
+          ],
         },
       ],
       totalPercentage: Number,
     },
   ],
 });
-
 const UserProgress = mongoose.model("UserProgress", userProgressSchema);
 
 export default UserProgress;

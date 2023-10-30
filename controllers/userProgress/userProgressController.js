@@ -6,13 +6,12 @@ export const submitExercise = async (req, res) => {
   console.log("userId", userId);
   console.log("verb", verb);
   console.log("tense", tense);
-  console.log("exercises", exerciseType);
-  console.log("complition", percentage);
+  console.log("exerciseType", exerciseType);
+  console.log("percentage", percentage);
 
   try {
     // Check if a progress document already exists for the user
     let progress = await UserProgress.findOne({ userId });
-
     if (!progress) {
       // If it doesn't exist, create a new progress document
       progress = new UserProgress({ userId, verbs: [] });
@@ -20,9 +19,10 @@ export const submitExercise = async (req, res) => {
 
     // Find the verb in the progress document
     let verbIndex = progress.verbs.findIndex((v) => v.verb === verb);
+
     if (verbIndex === -1) {
       // If the verb doesn't exist, add it
-      progress.verbs.push({ verb, exerciseType: exerciseType, tenses: [] });
+      progress.verbs.push({ verb, tenses: [] });
       verbIndex = progress.verbs.length - 1; // Get the index of the newly added verb
     }
 
@@ -32,22 +32,50 @@ export const submitExercise = async (req, res) => {
     );
 
     if (tenseIndex !== -1) {
-      // If the tense exists, update the percentage
-      progress.verbs[verbIndex].tenses[tenseIndex].percentage = percentage;
+      // If the tense exists, find the specific exercise type
+      const exerciseTypeIndex = progress.verbs[verbIndex].tenses[
+        tenseIndex
+      ].percentages.findIndex((p) => p.exerciseType === exerciseType);
+
+      if (exerciseTypeIndex !== -1) {
+        // If the exercise type exists for the tense, update the percentage
+        progress.verbs[verbIndex].tenses[tenseIndex].percentages[
+          exerciseTypeIndex
+        ].percentage = percentage;
+      } else {
+        // If the exercise type doesn't exist for the tense, add it
+        progress.verbs[verbIndex].tenses[tenseIndex].percentages.push({
+          exerciseType: exerciseType,
+          percentage: percentage,
+        });
+      }
     } else {
-      // If the tense doesn't exist, add it
+      // If the tense doesn't exist, add it along with the exercise type
       progress.verbs[verbIndex].tenses.push({
         tenseName: tense,
-        percentage: percentage,
-        exerciseType: exerciseType,
+        percentages: [
+          {
+            exerciseType: exerciseType,
+            percentage: percentage,
+          },
+        ],
       });
     }
 
     // Calculate the total percentage for the verb
     const totalPercentage = progress.verbs[verbIndex].tenses.reduce(
-      (total, tense) => total + tense.percentage,
+      (total, tense) => {
+        return (
+          total +
+          tense.percentages.reduce(
+            (exerciseTotal, ex) => exerciseTotal + ex.percentage,
+            0
+          )
+        );
+      },
       0
     );
+
     progress.verbs[verbIndex].totalPercentage = totalPercentage;
 
     await progress.save();
