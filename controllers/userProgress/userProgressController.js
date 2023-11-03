@@ -3,11 +3,6 @@ import User from "../../modules/User/userSchema.js";
 
 export const submitExercise = async (req, res) => {
   const { verb, tense, exerciseType, percentage, userId } = req.body;
-  console.log("userId", userId);
-  console.log("verb", verb);
-  console.log("tense", tense);
-  console.log("exerciseType", exerciseType);
-  console.log("percentage", percentage);
 
   try {
     // Check if a progress document already exists for the user
@@ -117,5 +112,47 @@ export const getUserProgress = async (req, res) => {
     return res
       .status(500)
       .json({ success: false, message: "Error fetching user progress" });
+  }
+};
+
+export const trackDownloadController = async (req, res) => {
+  const { userId, section, contentId } = req.body;
+  // console.log("in controller", { userId, section, contentId });
+  // console.log("in controller body", req.body);
+
+  try {
+    let userProgress = await UserProgress.findOne({ userId });
+
+    if (!userProgress) {
+      userProgress = new UserProgress({ userId, verbs: [], downloads: [] });
+    }
+
+    const downloadEntry = userProgress.downloads.find(
+      (download) =>
+        download.section === section && download.contentId === contentId
+    );
+
+    if (downloadEntry) {
+      downloadEntry.downloadCount += 1;
+    } else {
+      userProgress.downloads.push({
+        section,
+        contentId,
+        downloadDate: new Date(),
+        downloadCount: 1,
+      });
+    }
+
+    await userProgress.save();
+
+    return res.json({
+      success: true,
+      message: "Download tracked successfully",
+    });
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Error tracking download" });
   }
 };

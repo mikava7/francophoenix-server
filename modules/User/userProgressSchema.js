@@ -23,6 +23,14 @@ const userProgressSchema = new mongoose.Schema({
       totalPercentage: Number,
     },
   ],
+  downloads: [
+    {
+      section: String,
+      contentId: String,
+      downloadDate: Date,
+      downloadCount: Number,
+    },
+  ],
 });
 const UserProgress = mongoose.model("UserProgress", userProgressSchema);
 
