@@ -23,6 +23,7 @@ import { modifyFieldName } from "./controllers/dictionaryContollers.js";
 import Grammer from "./modules/grammerSchemas/grammerShema.js";
 import portfolioRouter from "./routes/portfolio/portfolioRouter.js";
 import userProgressRouter from "./routes/auth/userProgressRouter.js";
+import reportRouter from "./routes/reportRouter/reportRouter.js";
 // import { updateWordsWithPartOfSpeechAndDefinition } from "./controllers/dictionaryContollers.js";
 // import { updateQuizVocabularyShema } from "./controllers/quizVocabulary.js";
 const app = express();
@@ -56,6 +57,7 @@ app.use(conjugationRouter);
 app.use(authRouter);
 app.use(portfolioRouter);
 app.use(userProgressRouter);
+app.use(reportRouter);
 
 app.get("/health", (req, res) => {
   res.status(200).send("OK");

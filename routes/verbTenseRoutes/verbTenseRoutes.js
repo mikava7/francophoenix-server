@@ -4,6 +4,7 @@ import {
   getPresentTenseVerbs,
   getVerbExercise,
   getVerbList,
+  getExerciseByTense,
 } from "../../controllers/verbeTenseContollers/verbTenseControllers.js";
 import {
   submitExercise,
@@ -11,6 +12,7 @@ import {
 } from "../../controllers/userProgress/userProgressController.js";
 const verbTenseRouter = express.Router();
 
+verbTenseRouter.get("/verbs/check-your-knowlidge", getExerciseByTense);
 verbTenseRouter.get("/verbs/tenses/present", getPresentTenseVerbs);
 verbTenseRouter.get("/verbs/tenses/:id", getVerbExercise);
 verbTenseRouter.get("/verbs/exercise/verb-list", getVerbList);

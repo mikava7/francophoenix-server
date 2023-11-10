@@ -51,3 +51,16 @@ export const getVerbList = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch verbs" });
   }
 };
+
+export const getExerciseByTense = async (req, res) => {
+  const { selectedTense } = req.body;
+  try {
+    const exercises = await VerbTenseExercise.find({
+      [`tenses.${selectedTense}`]: { $exists: true, $not: { $size: 0 } },
+    });
+
+    res.status(200).json({ message: "Server Error" });
+  } catch (error) {
+    res.status(500).json({ message: "Server Error" });
+  }
+};
