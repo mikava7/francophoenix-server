@@ -1,10 +1,13 @@
 import mongoose from "mongoose";
 
-const tenseSchema = new mongoose.Schema({
-  sentence: String,
-  words: [String],
-  correctAnswer: String,
-});
+const tenseSchema = new mongoose.Schema(
+  {
+    sentence: String,
+    words: [String],
+    correctAnswer: String,
+  },
+  { timestamps: true }
+);
 
 const verbTenseExerciseSchema = new mongoose.Schema({
   verb: String,

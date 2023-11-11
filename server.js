@@ -24,6 +24,8 @@ import Grammer from "./modules/grammerSchemas/grammerShema.js";
 import portfolioRouter from "./routes/portfolio/portfolioRouter.js";
 import userProgressRouter from "./routes/auth/userProgressRouter.js";
 import reportRouter from "./routes/reportRouter/reportRouter.js";
+import VerbTenseExercise from "./modules/verbTenseShemas/presentTenseSchema.js";
+import mongoose from "mongoose";
 // import { updateWordsWithPartOfSpeechAndDefinition } from "./controllers/dictionaryContollers.js";
 // import { updateQuizVocabularyShema } from "./controllers/quizVocabulary.js";
 const app = express();
@@ -61,6 +63,39 @@ app.use(reportRouter);
 
 app.get("/health", (req, res) => {
   res.status(200).send("OK");
+});
+
+app.post("/verbes", async (req, res) => {
+  try {
+    // Find all documents in the collection
+    const verbs = await VerbTenseExercise.find({});
+
+    for (const verb of verbs) {
+      for (const tenseKey in verb.tenses) {
+        // Check if it's an array before applying map
+        if (Array.isArray(verb.tenses[tenseKey])) {
+          verb.tenses[tenseKey] = verb.tenses[tenseKey].map((sentence) => {
+            if (!sentence._id) {
+              sentence._id = new mongoose.Types.ObjectId();
+            }
+            return sentence;
+          });
+        }
+      }
+
+      // Save the updated document
+      await VerbTenseExercise.updateOne(
+        { _id: verb._id },
+        { $set: { tenses: verb.tenses } }
+      );
+    }
+
+    console.log("Successfully added _id to sentences.");
+    res.status(200).send("Successfully added _id to sentences.");
+  } catch (error) {
+    console.error("Error adding _id to sentences:", error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 const start = async () => {

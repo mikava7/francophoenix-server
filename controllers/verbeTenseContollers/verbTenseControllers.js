@@ -53,14 +53,40 @@ export const getVerbList = async (req, res) => {
 };
 
 export const getExerciseByTense = async (req, res) => {
-  const { selectedTense } = req.body;
-  try {
-    const exercises = await VerbTenseExercise.find({
-      [`tenses.${selectedTense}`]: { $exists: true, $not: { $size: 0 } },
-    });
+  const { selectedTense, sentencesLength, selectedVerbs } = req.body;
 
-    res.status(200).json({ message: "Server Error" });
+  try {
+    const exercises = await VerbTenseExercise.aggregate([
+      {
+        $match: {
+          verb: { $in: selectedVerbs },
+          [`tenses.${selectedTense}`]: { $exists: true, $not: { $size: 0 } },
+        },
+      },
+      {
+        $project: {
+          _id: 0, // Exclude _id field
+          sentences: {
+            $map: {
+              input: {
+                $slice: [`$tenses.${selectedTense}`, sentencesLength], // Select only the desired number of sentences
+              },
+              as: "tense",
+              in: {
+                sentence: "$$tense.sentence",
+                words: "$$tense.words",
+                correctAnswer: "$$tense.correctAnswer",
+                _id: 1,
+              },
+            },
+          },
+        },
+      },
+    ]);
+
+    res.json({ exercises });
   } catch (error) {
-    res.status(500).json({ message: "Server Error" });
+    console.error("Error:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
