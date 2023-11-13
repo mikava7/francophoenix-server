@@ -53,7 +53,7 @@ export const getVerbList = async (req, res) => {
 };
 
 export const getExerciseByTense = async (req, res) => {
-  const { selectedTense, sentencesLength, selectedVerbs } = req.body;
+  const { selectedTense, sentencesLength, selectedVerbs } = req.query;
 
   try {
     const exercises = await VerbTenseExercise.aggregate([
@@ -65,11 +65,11 @@ export const getExerciseByTense = async (req, res) => {
       },
       {
         $project: {
-          _id: 0, // Exclude _id field
+          _id: 0,
           sentences: {
             $map: {
               input: {
-                $slice: [`$tenses.${selectedTense}`, sentencesLength], // Select only the desired number of sentences
+                $slice: [`$tenses.${selectedTense}`, parseInt(sentencesLength)],
               },
               as: "tense",
               in: {
