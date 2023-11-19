@@ -9,9 +9,11 @@ import {
 import {
   submitExercise,
   getUserProgress,
+  submitVocabularyExercise,
 } from "../../controllers/userProgress/userProgressController.js";
 const verbTenseRouter = express.Router();
 
+verbTenseRouter.post("/vocabulary/progress", submitVocabularyExercise);
 verbTenseRouter.get("/verbs/check-your-knowledge", getExerciseByTense);
 verbTenseRouter.get("/verbs/tenses/present", getPresentTenseVerbs);
 verbTenseRouter.get("/verbs/tenses/:id", getVerbExercise);

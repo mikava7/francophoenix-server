@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-
 const userProgressSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -18,6 +17,22 @@ const userProgressSchema = new mongoose.Schema({
               percentage: Number,
             },
           ],
+        },
+      ],
+      totalPercentage: Number,
+    },
+  ],
+  vocabulary: [
+    {
+      topic: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "quizVocabulary",
+        required: true,
+      },
+      exercises: [
+        {
+          exerciseType: String,
+          percentage: Number,
         },
       ],
       totalPercentage: Number,

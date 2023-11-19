@@ -1,6 +1,6 @@
 import UserProgress from "../../modules/User/userProgressSchema.js";
 import User from "../../modules/User/userSchema.js";
-
+import quizVocabularySchema from "../../modules/quizVocabularySchema.js";
 export const submitExercise = async (req, res) => {
   const { verb, tense, exerciseType, percentage, userId } = req.body;
 
@@ -154,5 +154,115 @@ export const trackDownloadController = async (req, res) => {
     return res
       .status(500)
       .json({ success: false, message: "Error tracking download" });
+  }
+};
+
+export const submitVocabularyExercise = async (req, res) => {
+  const { userId, topicId, exerciseType, percentage } = req.body;
+  console.log("vocabularyIndex", { exerciseType, percentage, userId, topicId });
+
+  try {
+    // Check if a progress document already exists for the user
+    let progress = await UserProgress.findOne({ userId });
+    if (!progress) {
+      // If it doesn't exist, create a new progress document
+      progress = new UserProgress({
+        userId,
+        verbs: [],
+        vocabulary: [],
+        downloads: [],
+      });
+    }
+
+    // Check if the vocabulary array is defined, if not, initialize it
+    if (!progress.vocabulary) {
+      progress.vocabulary = [];
+    }
+
+    // Find the vocabulary index for the specified topic
+    const vocabularyIndex = progress.vocabulary.findIndex(
+      (v) => v.topic.toString() === topicId.toString()
+    );
+    console.log("vocabularyIndex", vocabularyIndex);
+
+    if (vocabularyIndex !== -1) {
+      // Check if the exercises array is defined, if not, initialize it
+      if (!progress.vocabulary[vocabularyIndex].exercises) {
+        progress.vocabulary[vocabularyIndex].exercises = [];
+      }
+
+      let exerciseUpdated = false;
+
+      // Iterate over exercises to find and update the correct one
+      for (
+        let i = 0;
+        i < progress.vocabulary[vocabularyIndex].exercises.length;
+        i++
+      ) {
+        const exercise = progress.vocabulary[vocabularyIndex].exercises[i];
+
+        if (exercise.exerciseType === exerciseType) {
+          // If the exerciseType exists, update the percentage
+          exercise.percentage = percentage;
+          exerciseUpdated = true;
+          break;
+        }
+      }
+
+      // If the exerciseType doesn't exist, add it
+      if (!exerciseUpdated) {
+        progress.vocabulary[vocabularyIndex].exercises.push({
+          exerciseType,
+          percentage,
+        });
+      }
+
+      // Calculate the total percentage for the vocabulary section for the specific topic
+      const totalPercentage = progress.vocabulary[
+        vocabularyIndex
+      ].exercises.reduce(
+        (exerciseTotal, ex) => exerciseTotal + ex.percentage,
+        0
+      );
+
+      progress.vocabulary[vocabularyIndex].totalPercentage = totalPercentage;
+    } else {
+      // If the topic doesn't exist, add it along with the exerciseType
+      const newTopic = {
+        topic: topicId,
+        exercises: [{ exerciseType, percentage }],
+        totalPercentage: percentage,
+      };
+
+      progress.vocabulary.push(newTopic);
+    }
+
+    // Calculate the total percentage for the vocabulary section
+    const totalPercentage = progress.vocabulary.reduce((total, topic) => {
+      const topicTotal =
+        topic.totalPercentage !== undefined ? topic.totalPercentage : 0;
+
+      return total + topicTotal;
+    }, 0);
+
+    // progress.vocabularyTotalPercentage = totalPercentage;
+
+    await progress.save();
+
+    // Update the user's progressId in the User model if necessary
+    const user = await User.findByIdAndUpdate(userId, {
+      progressId: progress._id,
+    });
+
+    return res.json({
+      success: true,
+      message: "Vocabulary exercise submitted successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "Error submitting vocabulary exercise",
+    });
   }
 };
