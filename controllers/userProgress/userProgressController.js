@@ -166,7 +166,6 @@ export const submitVocabularyExercise = async (req, res) => {
     completedSentenceIndices,
     weakWords,
   } = req.body;
-  console.log("weakWords on back", weakWords);
   try {
     // Check if a progress document already exists for the user
     let progress = await UserProgress.findOne({ userId });

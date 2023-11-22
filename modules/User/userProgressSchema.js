@@ -22,6 +22,7 @@ const userProgressSchema = new mongoose.Schema({
       totalPercentage: Number,
     },
   ],
+
   vocabulary: [
     {
       topic: {
