@@ -35,7 +35,7 @@ const userProgressSchema = new mongoose.Schema({
           exerciseType: String,
           percentage: Number,
           completedSentenceIndices: [Number],
-          weakWords: [String],
+          weakWords: [Number],
         },
       ],
       totalPercentage: Number,

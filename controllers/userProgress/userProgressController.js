@@ -167,6 +167,7 @@ export const submitVocabularyExercise = async (req, res) => {
     weakWords,
   } = req.body;
   try {
+    console.log("weakWords on backend", weakWords);
     // Check if a progress document already exists for the user
     let progress = await UserProgress.findOne({ userId });
     if (!progress) {
@@ -209,7 +210,9 @@ export const submitVocabularyExercise = async (req, res) => {
           // If the exerciseType exists, update the percentage and completedSentenceIndices
           exercise.percentage = percentage;
           exercise.completedSentenceIndices = completedSentenceIndices;
-          exercise.weakWords = weakWords;
+          if (weakWords.length > 0) {
+            exercise.weakWords = weakWords;
+          }
 
           exerciseUpdated = true;
           break;
