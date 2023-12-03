@@ -36,6 +36,7 @@ const userProgressSchema = new mongoose.Schema({
           percentage: Number,
           completedSentenceIndices: [Number],
           weakWords: [Number],
+          topicType: Boolean,
         },
       ],
       totalPercentage: Number,

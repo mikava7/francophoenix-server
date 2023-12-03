@@ -165,9 +165,13 @@ export const submitVocabularyExercise = async (req, res) => {
     percentage,
     completedSentenceIndices,
     weakWords,
+    topicType,
   } = req.body;
   try {
     console.log("weakWords on backend", weakWords);
+    console.log("percentage on backend", percentage);
+    console.log("topicType on backend", topicType);
+
     // Check if a progress document already exists for the user
     let progress = await UserProgress.findOne({ userId });
     if (!progress) {
@@ -189,6 +193,9 @@ export const submitVocabularyExercise = async (req, res) => {
     const vocabularyIndex = progress.vocabulary.findIndex(
       (v) => v.topic.toString() === topicId.toString()
     );
+    console.log("Vocabulary Index:", vocabularyIndex);
+    let exercise;
+    let exerciseUpdated = false;
 
     if (vocabularyIndex !== -1) {
       // Check if the exercises array is defined, if not, initialize it
@@ -205,10 +212,16 @@ export const submitVocabularyExercise = async (req, res) => {
         i++
       ) {
         const exercise = progress.vocabulary[vocabularyIndex].exercises[i];
+        console.log("Checking exercise:", exercise);
 
         if (exercise.exerciseType === exerciseType) {
+          console.log("Updating exercise:", exercise);
+
           // If the exerciseType exists, update the percentage and completedSentenceIndices
-          exercise.percentage = percentage;
+          exercise.percentage += percentage;
+          const maxPercentage = topicType === true ? 40 : 50;
+          exercise.percentage = Math.min(exercise.percentage, maxPercentage);
+
           exercise.completedSentenceIndices = completedSentenceIndices;
           if (weakWords.length > 0) {
             exercise.weakWords = weakWords;
@@ -227,10 +240,18 @@ export const submitVocabularyExercise = async (req, res) => {
           completedSentenceIndices,
           weakWords,
         });
-      }
+      } else {
+        // If the exerciseType exists, find the specific exercise and update completedSentenceIndices
+        const updatedExercise = progress.vocabulary[
+          vocabularyIndex
+        ].exercises.find((exercise) => exercise.exerciseType === exerciseType);
 
-      // Reset completedSentenceIndices for the new topic
-      progress.vocabulary[vocabularyIndex].completedSentenceIndices = [];
+        if (updatedExercise) {
+          updatedExercise.completedSentenceIndices = [
+            ...new Set(completedSentenceIndices),
+          ];
+        }
+      }
     } else {
       // If the topic doesn't exist, add it along with the exerciseType
       const newTopic = {
@@ -253,6 +274,7 @@ export const submitVocabularyExercise = async (req, res) => {
     }, 0);
 
     await progress.save();
+    console.log("Updating exercise:", exercise);
 
     // Update the user's progressId in the User model if necessary
     const user = await User.findByIdAndUpdate(userId, {
