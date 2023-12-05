@@ -166,11 +166,10 @@ export const submitVocabularyExercise = async (req, res) => {
     completedSentenceIndices,
     weakWords,
     topicType,
+    completed,
   } = req.body;
   try {
-    console.log("weakWords on backend", weakWords);
-    console.log("percentage on backend", percentage);
-    console.log("topicType on backend", topicType);
+    // console.log("completed on backend", completed);
 
     // Check if a progress document already exists for the user
     let progress = await UserProgress.findOne({ userId });
@@ -193,7 +192,6 @@ export const submitVocabularyExercise = async (req, res) => {
     const vocabularyIndex = progress.vocabulary.findIndex(
       (v) => v.topic.toString() === topicId.toString()
     );
-    console.log("Vocabulary Index:", vocabularyIndex);
     let exercise;
     let exerciseUpdated = false;
 
@@ -215,8 +213,6 @@ export const submitVocabularyExercise = async (req, res) => {
         console.log("Checking exercise:", exercise);
 
         if (exercise.exerciseType === exerciseType) {
-          console.log("Updating exercise:", exercise);
-
           // If the exerciseType exists, update the percentage and completedSentenceIndices
           exercise.percentage += percentage;
           const maxPercentage = topicType === true ? 40 : 50;
@@ -239,6 +235,7 @@ export const submitVocabularyExercise = async (req, res) => {
           percentage,
           completedSentenceIndices,
           weakWords,
+          completed,
         });
       } else {
         // If the exerciseType exists, find the specific exercise and update completedSentenceIndices
@@ -260,6 +257,7 @@ export const submitVocabularyExercise = async (req, res) => {
           { exerciseType, percentage, completedSentenceIndices, weakWords },
         ],
         totalPercentage: percentage,
+        completed: false,
       };
 
       progress.vocabulary.push(newTopic);
@@ -267,14 +265,23 @@ export const submitVocabularyExercise = async (req, res) => {
 
     // Calculate the total percentage for the vocabulary section for the specific topic
     const totalPercentage = progress.vocabulary.reduce((total, topic) => {
-      const topicTotal =
-        topic.totalPercentage !== undefined ? topic.totalPercentage : 0;
+      const topicTotal = topic.exercises.reduce(
+        (topicExerciseTotal, exercise) => {
+          return topicExerciseTotal + exercise.percentage;
+        },
+        0
+      );
+
+      topic.totalPercentage = topicTotal;
+      if (completed) {
+        topic.completed = completed;
+        console.log("completed :", topic.completed);
+      }
 
       return total + topicTotal;
     }, 0);
 
     await progress.save();
-    console.log("Updating exercise:", exercise);
 
     // Update the user's progressId in the User model if necessary
     const user = await User.findByIdAndUpdate(userId, {
@@ -290,6 +297,48 @@ export const submitVocabularyExercise = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Error submitting vocabulary exercise",
+    });
+  }
+};
+
+export const submitGlobalWeakWords = async (req, res) => {
+  const { userId, weakWord } = req.body;
+  console.log("weakWord on backend", weakWord);
+  try {
+    let progress = await UserProgress.findOne({ userId });
+
+    if (!progress) {
+      // If it doesn't exist, create a new progress document
+      progress = new UserProgress({
+        userId,
+        verbs: [],
+        vocabulary: [],
+        downloads: [],
+        globalWeakWords: [],
+      });
+    }
+
+    // Initialize globalWeakWords as an empty array if it doesn't exist yet
+    if (!progress.globalWeakWords) {
+      progress.globalWeakWords = [];
+    }
+
+    // Check if the weak word is not already in the array before pushing
+    if (!progress.globalWeakWords.includes(weakWord)) {
+      progress.globalWeakWords.push(weakWord);
+    }
+
+    await progress.save();
+
+    return res.json({
+      success: true,
+      message: "Global weak word submitted successfully",
+    });
+  } catch (error) {
+    console.error("Error submitting global weak word:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Error submitting global weak word",
     });
   }
 };

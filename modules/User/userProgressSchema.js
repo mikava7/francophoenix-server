@@ -40,6 +40,7 @@ const userProgressSchema = new mongoose.Schema({
         },
       ],
       totalPercentage: Number,
+      completed: { type: Boolean, default: false },
     },
   ],
   downloads: [
@@ -50,6 +51,7 @@ const userProgressSchema = new mongoose.Schema({
       downloadCount: Number,
     },
   ],
+  globalWeakWords: [String],
 });
 const UserProgress = mongoose.model("UserProgress", userProgressSchema);
 

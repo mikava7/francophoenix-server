@@ -10,9 +10,10 @@ import {
   submitExercise,
   getUserProgress,
   submitVocabularyExercise,
+  submitGlobalWeakWords,
 } from "../../controllers/userProgress/userProgressController.js";
 const verbTenseRouter = express.Router();
-
+verbTenseRouter.post("/vocabulary/progress/global", submitGlobalWeakWords);
 verbTenseRouter.post("/vocabulary/progress", submitVocabularyExercise);
 verbTenseRouter.get("/verbs/check-your-knowledge", getExerciseByTense);
 verbTenseRouter.get("/verbs/tenses/present", getPresentTenseVerbs);
