@@ -24,6 +24,7 @@ import Grammer from "./modules/grammerSchemas/grammerShema.js";
 import portfolioRouter from "./routes/portfolio/portfolioRouter.js";
 import userProgressRouter from "./routes/auth/userProgressRouter.js";
 import reportRouter from "./routes/reportRouter/reportRouter.js";
+import vocabularyProgressRouter from "./routes/progress/vocabularyProgress.js";
 import VerbTenseExercise from "./modules/verbTenseShemas/presentTenseSchema.js";
 import mongoose from "mongoose";
 // import { updateWordsWithPartOfSpeechAndDefinition } from "./controllers/dictionaryContollers.js";
@@ -60,6 +61,7 @@ app.use(authRouter);
 app.use(portfolioRouter);
 app.use(userProgressRouter);
 app.use(reportRouter);
+app.use(vocabularyProgressRouter);
 
 app.get("/health", (req, res) => {
   res.status(200).send("OK");

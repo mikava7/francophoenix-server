@@ -1,6 +1,7 @@
 import UserProgress from "../../modules/User/userProgressSchema.js";
 import User from "../../modules/User/userSchema.js";
 import quizVocabularySchema from "../../modules/quizVocabularySchema.js";
+import { ObjectId } from "mongodb";
 export const submitExercise = async (req, res) => {
   const { verb, tense, exerciseType, percentage, userId } = req.body;
 
@@ -167,11 +168,13 @@ export const submitVocabularyExercise = async (req, res) => {
     weakWords,
     topicType,
     completed,
+    clearWeakWords,
   } = req.body;
   try {
     // console.log("completed on backend", completed);
 
     // Check if a progress document already exists for the user
+    console.log("clearWeakWords", clearWeakWords);
     let progress = await UserProgress.findOne({ userId });
     if (!progress) {
       // If it doesn't exist, create a new progress document
@@ -287,7 +290,22 @@ export const submitVocabularyExercise = async (req, res) => {
     const user = await User.findByIdAndUpdate(userId, {
       progressId: progress._id,
     });
+    if (clearWeakWords) {
+      const topicIndex = progress.vocabulary.findIndex((topic) =>
+        topic.topic.equals(topicId)
+      );
 
+      if (topicIndex !== -1) {
+        const exercises = progress.vocabulary[topicIndex].exercises;
+
+        if (exercises.length > 0) {
+          exercises[0].weakWords = [];
+          console.log("exercises[0].weakWords", exercises[0].weakWords);
+        }
+
+        await progress.save();
+      }
+    }
     return res.json({
       success: true,
       message: "Vocabulary exercise submitted successfully",
@@ -340,5 +358,76 @@ export const submitGlobalWeakWords = async (req, res) => {
       success: false,
       message: "Error submitting global weak word",
     });
+  }
+};
+
+export const clearWeakWords = async (req, res) => {
+  const { userId, topicId } = req.body;
+  console.log("first", { userId, topicId });
+  try {
+    // Find user progress
+    const userProgress = await UserProgress.findOne({ userId });
+
+    // If user progress is not found, return 404
+    if (!userProgress) {
+      return res.status(404).json({ message: "User progress not found" });
+    }
+
+    // Find the topic in user progress
+    const topicIndex = userProgress.vocabulary.findIndex((topic) =>
+      topic.topic.equals(topicId)
+    );
+
+    // If the topic is not found, return 404
+    if (topicIndex === -1) {
+      return res.status(404).json({ message: "Topic not found" });
+    }
+
+    // Clear weak words for the topic
+    const exercises = userProgress.vocabulary[topicIndex].exercises;
+
+    if (exercises.length > 0) {
+      console.log("Before clearing weak words:", exercises[0].weakWords);
+
+      exercises[0].weakWords = [];
+
+      console.log("After clearing weak words:", exercises[0].weakWords);
+    }
+
+    // Save changes to the database
+    await userProgress.save();
+
+    // Return success message
+    return res.status(200).json({ message: "Weak words cleared successfully" });
+  } catch (error) {
+    // Handle errors and return a 500 response
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+// Clear global weak words for the user
+export const clearGlobalWeakWords = async (req, res) => {
+  // Extract userId from the request body
+  const { userId } = req.body;
+
+  try {
+    // Find user progress by userId
+    let progress = await UserProgress.findOne({ userId });
+
+    // Clear the globalWeakWords array
+    progress.globalWeakWords = [];
+
+    // Save the changes to the database
+    await progress.save();
+
+    // Return a success message
+    return res
+      .status(200)
+      .json({ message: "Global weak words cleared successfully" });
+  } catch (error) {
+    // Handle errors and return a 500 response
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
