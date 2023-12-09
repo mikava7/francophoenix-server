@@ -309,6 +309,9 @@ export const submitVocabularyExercise = async (req, res) => {
     return res.json({
       success: true,
       message: "Vocabulary exercise submitted successfully",
+      ...(completed && {
+        weakWords: progress.vocabulary[vocabularyIndex].exercises[0].weakWords,
+      }),
     });
   } catch (error) {
     console.log(error);
