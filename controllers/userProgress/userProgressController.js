@@ -171,7 +171,7 @@ export const submitVocabularyExercise = async (req, res) => {
     clearWeakWords,
   } = req.body;
   try {
-    // console.log("completed on backend", completed);
+    console.log("completed on backend", completed);
 
     // Check if a progress document already exists for the user
     console.log("clearWeakWords", clearWeakWords);
@@ -202,6 +202,9 @@ export const submitVocabularyExercise = async (req, res) => {
       // Check if the exercises array is defined, if not, initialize it
       if (!progress.vocabulary[vocabularyIndex].exercises) {
         progress.vocabulary[vocabularyIndex].exercises = [];
+      }
+      if (completed) {
+        progress.vocabulary[vocabularyIndex].completed = completed;
       }
 
       let exerciseUpdated = false;
@@ -238,7 +241,6 @@ export const submitVocabularyExercise = async (req, res) => {
           percentage,
           completedSentenceIndices,
           weakWords,
-          completed,
         });
       } else {
         // If the exerciseType exists, find the specific exercise and update completedSentenceIndices
@@ -276,10 +278,10 @@ export const submitVocabularyExercise = async (req, res) => {
       );
 
       topic.totalPercentage = topicTotal;
-      if (completed) {
-        topic.completed = completed;
-        console.log("completed :", topic.completed);
-      }
+      // if (completed) {
+      //   topic.completed = completed;
+      //   console.log("completed :", topic.completed);
+      // }
 
       return total + topicTotal;
     }, 0);
